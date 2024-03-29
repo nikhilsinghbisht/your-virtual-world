@@ -509,7 +509,7 @@ class GestureController:
     def __init__(self):
         """Initilaizes attributes."""
         GestureController.gc_mode = 1
-        GestureController.cap =  cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        GestureController.cap = cv2.VideoCapture(0)
         GestureController.CAM_HEIGHT = GestureController.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         GestureController.CAM_WIDTH = GestureController.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     
@@ -596,5 +596,5 @@ class GestureController:
         cv2.destroyAllWindows()
 
 # uncomment to run directly
-#gc1 = GestureController()
-#gc1.start()
+gc1 = GestureController()
+gc1.start()

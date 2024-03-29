@@ -1,5 +1,7 @@
 import pyttsx3
+import pywhatkit as kit
 import speech_recognition as sr
+
 from datetime import date
 import time
 import webbrowser
@@ -52,7 +54,7 @@ def wish():
     else:
         reply("Good Evening!")  
         
-    reply("I am Proton, how may I help you?")
+    reply("I am  Nova, how may I help you?")
 
 # Set Microphone parameters
 with sr.Microphone() as source:
@@ -80,7 +82,7 @@ def record_audio():
 def respond(voice_data):
     global file_exp_status, files, is_awake, path
     print(voice_data)
-    voice_data.replace('proton','')
+    voice_data.replace('Nova','')
     app.eel.addUserMsg(voice_data)
 
     if is_awake==False:
@@ -93,7 +95,7 @@ def respond(voice_data):
         wish()
 
     elif 'what is your name' in voice_data:
-        reply('My name is Proton!')
+        reply('My name is Nova')
 
     elif 'date' in voice_data:
         reply(today.strftime("%B %d, %Y"))
@@ -104,11 +106,35 @@ def respond(voice_data):
     elif 'search' in voice_data:
         reply('Searching for ' + voice_data.split('search')[1])
         url = 'https://google.com/search?q=' + voice_data.split('search')[1]
+        
         try:
             webbrowser.get().open(url)
             reply('This is what I found Sir')
         except:
             reply('Please check your Internet')
+    
+   # ...
+
+   # ...
+
+    elif ('song' in voice_data) or ('saun' in voice_data):
+     search_query = voice_data.split('song', 1)[-1].strip() if 'song' in voice_data else voice_data.split('saun', 1)[-1].strip()
+     reply(f'Searching for {search_query} on YouTube')
+     youtube_url = f'https://www.youtube.com/results?search_query={search_query}'
+     v=pyttsx3.init()
+     try:
+        kit.playonyt(youtube_url)
+        webbrowser.get().open(youtube_url)
+        time.sleep(3)  # Allow some time for the page to load
+        pyautogui.click(x=100, y=100)  # Adjust the coordinates based on your screen resolution
+        reply(f'Now playing the first video for {search_query} on YouTube')
+     except:
+        reply('Please check your Internet')
+
+# ...
+
+
+# ...
 
     elif 'location' in voice_data:
         reply('Which place are you looking for ?')
@@ -135,7 +161,7 @@ def respond(voice_data):
         
     
     # DYNAMIC CONTROLS
-    elif 'launch gesture recognition' in voice_data:
+    elif 'gesture' or 'launch gesture recognition' in voice_data:
         if Gesture_Controller.GestureController.gc_mode:
             reply('Gesture recognition is already active')
         else:
@@ -144,7 +170,7 @@ def respond(voice_data):
             t.start()
             reply('Launched Successfully')
 
-    elif ('stop gesture recognition' in voice_data) or ('top gesture recognition' in voice_data):
+    elif ('stop gesture recognition' in voice_data) or ('top gesture recognition' in voice_data) or ('stop gr' in voice_data):
         if Gesture_Controller.GestureController.gc_mode:
             Gesture_Controller.GestureController.gc_mode = 0
             reply('Gesture recognition stopped')
@@ -237,7 +263,7 @@ while True:
         voice_data = record_audio()
 
     #process voice_data
-    if 'proton' in voice_data:
+    if 'nova' in voice_data:
         try:
             #Handle sys.exit()
             respond(voice_data)
